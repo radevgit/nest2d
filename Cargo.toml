@@ -1,0 +1,27 @@
+[package]
+name = "Nest2D"
+version = "0.1.0"
+authors = ["radevgit"]
+edition = "2021"
+
+
+[dependencies]
+dioxus = { version = "0.6.0", features = ["router", "fullstack"] }
+
+[features]
+default = ["desktop"]
+web = ["dioxus/web"]
+desktop = ["dioxus/desktop"]
+mobile = ["dioxus/mobile"]
+
+[profile]
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"

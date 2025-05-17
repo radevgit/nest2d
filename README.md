@@ -2,7 +2,7 @@
 
 
 
-<img src="nest2d.png?raw=true" width="895" height="555" title="Nest2D UI screen" alt="Nest2D UI screen"/>
+<img src="nest2d.png?raw=true" width="895" height="555" title="Nest2D UI screen" alt="Nest2D UI"/>
 
 ## Status
 

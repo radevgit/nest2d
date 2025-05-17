@@ -1,7 +1,7 @@
 // The dioxus prelude contains a ton of common items used in dioxus apps. It's a good idea to import wherever you
 // need dioxus
 use dioxus::prelude::*;
-use views::{Configuration, Nesting, Parts, Projects, Sheets, Shell};
+use views::{Config, Nesting, Parts, Projects, Sheets, Shell};
 
 
 /// Define a components module that contains all shared components for our app.
@@ -35,7 +35,7 @@ enum Route {
         Nesting {},
 
         #[route("/config")]
-        Configuration {},
+        Config {},
 
 
         // // The route attribute can include dynamic parameters that implement [`std::str::FromStr`] and [`std::fmt::Display`] with the `:` syntax.
@@ -51,7 +51,7 @@ enum Route {
 //const FAVICON: Asset = asset!("/assets/favicon.ico");
 // The asset macro also minifies some assets like CSS and JS to make bundled smaller
 //const MAIN_CSS: Asset = asset!("/assets/styling/main.css");
-const TAILWIND_CSS: Asset = asset!("./assets/tailwind.css");
+const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
 fn main() {
     // The `launch` function is the main entry point for a dioxus app. It takes a component and renders it with the platform feature
@@ -79,14 +79,10 @@ fn App() -> Element {
         div {
             document::Meta { name: "viewport", content: "width=device-width, initial-scale=1.0",}
             document::Meta { name: "Charset", content: "utf-8",}
-            // In addition to element and text (which we will see later), rsx can contain other components. In this case,
-            // we are using the `document::Link` component to add a link to our favicon and main CSS file into the head of our app.
             //document::Link { rel: "icon", href: FAVICON }
             //document::Link { rel: "stylesheet", href: MAIN_CSS }
             document::Link { rel: "stylesheet", href: TAILWIND_CSS }
 
-            // The router component renders the route enum we defined above. It will handle synchronization of the URL and render
-            // the layouts and components for the active route.
             Router::<Route> {}
         }
     }

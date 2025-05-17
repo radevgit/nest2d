@@ -1,6 +1,6 @@
 
 use dioxus::prelude::*;
-use icons::{cog_icon, home_icon, nesting_icon, parts_icon, sheets3_icon, sheets_icon};
+use icons::{cog_icon, projects_icon, nesting_icon, parts_icon, sheets_icon};
 
 use crate::{components::navbar::NavbarRow, Route};
 
@@ -16,25 +16,32 @@ pub(crate) struct NavbarProps {
 
 #[component]
 pub fn Navbar() -> Element {
+    let mut current = use_signal(|| 0);
+    
     rsx! {
         nav {
             class: "flex flex-1 flex-col",
             ul { class: "flex flex-1 flex-col gap-y-7", role: "list",
                 li {
                     ul { class: "-mx-2 space-y-1", role: "list",
-                        NavbarRow {name: "Projects", active: true, route: Route::Projects {}, icon: home_icon(), count: Some("3".to_string())}
+                        onclick: move |_| current.set(0),
+                        NavbarRow {name: "Projects", active: is_active(0, current()), route: Route::Projects {}, icon: projects_icon(is_active(0, current())), count: Some("3".to_string())}
                     }
                     ul { class: "-mx-2 space-y-1", role: "list",
-                        NavbarRow {name: "Sheets", route: Route::Sheets {}, icon: sheets3_icon(), count: Some("15".to_string())}
+                        onclick: move |_| current.set(1),
+                        NavbarRow {name: "Sheets", active: is_active(1, current()), route: Route::Sheets {}, icon: sheets_icon(is_active(1, current())), count: Some("15".to_string())}
                     }
                     ul { class: "-mx-2 space-y-1", role: "list",
-                        NavbarRow {name: "Parts", route: Route::Parts {}, icon: parts_icon(), count: Some("223".to_string())}
+                        onclick: move |_| current.set(2),
+                        NavbarRow {name: "Parts", active: is_active(2, current()), route: Route::Parts {}, icon: parts_icon(is_active(2, current())), count: Some("223".to_string())}
                     }
                     ul { class: "-mx-2 space-y-1", role: "list",
-                        NavbarRow {name: "Nesting", route: Route::Nesting {  }, icon: nesting_icon(), count: Some("75%".to_string())}
+                        onclick: move |_| current.set(3),
+                        NavbarRow {name: "Nesting", active: is_active(3, current()), route: Route::Nesting {}, icon: nesting_icon(is_active(3, current())), count: Some("75%".to_string())}
                     }
                     ul { class: "-mx-2 space-y-1", role: "list",
-                        NavbarRow {name: "Configuration", route: Route::Configuration {  }, icon: cog_icon()}
+                        onclick: move |_| current.set(4),
+                        NavbarRow {name: "Config", active: is_active(4, current()), route: Route::Config {}, icon: cog_icon(is_active(4, current()))}
                     }
                 }
             }
@@ -42,15 +49,23 @@ pub fn Navbar() -> Element {
     }
 }
 
+pub(crate) fn is_active(position: i64, current: i64) -> bool {
+    position == current
+}
+
 mod icons {
     use super::*;
 
 
 
-    pub(crate) fn home_icon() -> Element {
+    pub(crate) fn projects_icon(selected: bool) -> Element {
         rsx! {        
             svg {
-                class: "size-6 shrink-0 text-indigo-600",
+                class: if selected {
+                    "size-6 shrink-0 text-indigo-600"
+                } else {
+                    "size-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                },
                 "data-slot": "icon",
                 fill: "none",
                 stroke: "currentColor",
@@ -65,7 +80,30 @@ mod icons {
         }
     }
 
-    pub(crate) fn sheets_icon() -> Element {
+    pub(crate) fn sheets_icon(selected: bool) -> Element {
+        rsx! {        
+            svg {
+                class: if selected {
+                    "size-6 shrink-0 text-indigo-600"
+                } else {
+                    "size-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                },
+                class: "size-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                "data-slot": "icon",
+                fill: "none",
+                stroke: "currentColor",
+                stroke_width: "1.5",
+                view_box: "0 0 24 24",
+                path {
+                    d: "M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3",
+                    stroke_linecap: "round",
+                    stroke_linejoin: "round",
+                }
+            }
+        }
+    }
+
+    pub(crate) fn sheets2_icon() -> Element {
         rsx! {        
             svg {
                 class: "size-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
@@ -83,10 +121,14 @@ mod icons {
         }
     }
 
-    pub(crate) fn parts_icon() -> Element {
+    pub(crate) fn parts_icon(selected: bool) -> Element {
         rsx! {        
             svg {
-                class: "size-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                class: if selected {
+                    "size-6 shrink-0 text-indigo-600"
+                } else {
+                    "size-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                },
                 "data-slot": "icon",
                 fill: "none",
                 stroke: "currentColor",
@@ -101,10 +143,14 @@ mod icons {
         }
     }
 
-    pub(crate) fn nesting_icon() -> Element {
+    pub(crate) fn nesting_icon(selected: bool) -> Element {
         rsx! {        
             svg {
-                class: "size-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                class: if selected {
+                    "size-6 shrink-0 text-indigo-600"
+                } else {
+                    "size-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                },
                 "data-slot": "icon",
                 fill: "none",
                 stroke: "currentColor",
@@ -119,10 +165,14 @@ mod icons {
         }
     }
 
-    pub(crate) fn cog_icon() -> Element {
+    pub(crate) fn cog_icon(selected: bool) -> Element {
         rsx! {        
             svg {
-                class: "size-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                class: if selected {
+                    "size-6 shrink-0 text-indigo-600"
+                } else {
+                    "size-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                },
                 "data-slot": "icon",
                 fill: "none",
                 stroke: "currentColor",
@@ -142,22 +192,6 @@ mod icons {
         }
     }
 
-    pub(crate) fn sheets3_icon() -> Element {
-        rsx! {        
-            svg {
-                class: "size-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
-                "data-slot": "icon",
-                fill: "none",
-                stroke: "currentColor",
-                stroke_width: "1.5",
-                view_box: "0 0 24 24",
-                path {
-                    d: "M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3",
-                    stroke_linecap: "round",
-                    stroke_linejoin: "round",
-                }
-            }
-        }
-    }
+
 
 }

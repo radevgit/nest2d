@@ -12,13 +12,19 @@ pub fn Shell() -> Element {
             div { class: "md:fixed md:inset-y-0 md:z-50 md:flex md:w-64 md:flex-col bg-white",
                 div { class: "flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6",
                     div { class: "flex h-16 shrink-0 items-center",
-                        nest2d_icon {}
+                        Link {
+                            class: "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-indigo-600",
+                            to: "https://nest2d.com?source=app",
+                            nest2d_icon {}
+                            "Nest2D",
+                        }
                     }
                     Navbar {  }
                 }
             }
             main { class: "py-10 md:pl-72",
                 div { class: "px-4 sm:px-6 md:px-8",
+                    background_color: "white",
                     Outlet::<Route> {}
                 }
             }
@@ -28,6 +34,8 @@ pub fn Shell() -> Element {
 
 mod icons {
     use super::*;
+
+    
 
     pub(crate) fn nest2d_icon() -> Element {
         rsx! {        

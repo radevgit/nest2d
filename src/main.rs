@@ -1,13 +1,15 @@
-// The dioxus prelude contains a ton of common items used in dioxus apps. It's a good idea to import wherever you
-// need dioxus
+
 use dioxus::prelude::*;
 use views::{Config, Nesting, Parts, Projects, Sheets, Shell};
+
 
 
 /// Define a components module that contains all shared components for our app.
 mod components;
 /// Define a views module that contains the UI for all Layouts and Routes for our app.
 mod views;
+
+mod engine;
 
 /// The Route enum is used to define the structure of internal routes in our app. All route enums need to derive
 /// the [`Routable`] trait, which provides the necessary methods for the router to work.
@@ -68,13 +70,13 @@ fn main() {
     //     .launch(App);
 }
 
-/// App is the main component of our app. Components are the building blocks of dioxus apps. Each component is a function
-/// that takes some props and returns an Element. In this case, App takes no props because it is the root of our app.
-///
-/// Components should be annotated with `#[component]` to support props, better error messages, and autocomplete
+// Create a new wrapper type
+#[derive(Clone)]
+struct ProjectState(String);
+
 #[component]
 fn App() -> Element {
-    // The `rsx!` macro lets us define HTML inside of rust. It expands to an Element with all of our HTML inside.
+    use_context_provider(|| ProjectState("DefaultProject".to_string()));
     rsx! {
         div {
             document::Meta { name: "viewport", content: "width=device-width, initial-scale=1.0",}
@@ -87,3 +89,5 @@ fn App() -> Element {
         }
     }
 }
+
+

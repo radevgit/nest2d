@@ -1,23 +1,23 @@
-use dioxus::{html::u, prelude::*};
+use dioxus::prelude::*;
 
-use crate::{components::CreateProjectInputs, engine::{create_project, CreateProject}, ProjectState};
-use crate::{components::Navbar, components::ListProjects};
+use crate::{components::ProjectsTable, engine::{count_projects, create_project}, ProjectState};
+use crate::views::shell::CURRENT_PROJECT;
 
 
-/// The PRojects page component that will be rendered when the current route is `[Route::Projects]`
+
 #[component]
 pub fn Projects() -> Element {
     let projectState = use_context::<ProjectState>();
-    let mut name = use_signal(|| "Default".to_string());
-    let mut description = use_signal(|| "".to_string());
+    let mut name = use_signal(|| "Project Name".to_string());
+    let mut description = use_signal(|| "Desctiption".to_string());
     let mut projects = use_resource(move || crate::engine::list_projects());
 
     rsx! {
-        div {
-            div {class: "space-y-12",
-                div {class: "pb-8",
+        div { class: "px-4 sm:px-6 lg:px-8",
+            div {class: "space-y-12 w-96",
+                div {
                     h2 { class: "text-base/7 font-semibold text-gray-900", "Create and select projects" }
-                    div { class: "mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6",
+                    div { class: "mt-10 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-4",
                         div { class: "relative",
                             label { 
                                 class: "absolute -top-2 left-2 inline-block rounded-lg bg-white px-1 text-xs font-medium text-gray-900",
@@ -61,15 +61,16 @@ pub fn Projects() -> Element {
                                 "Create"
                             }
                         }
-                    
-                    }   
+                    }
+                    h2 { class: "text-base/7 font-semibold text-gray-900", "Active project: {CURRENT_PROJECT.read()}" }   
                 }
                 
             }
-        }
-        div {
-            ListProjects { projects }
-        }
+            ProjectsTable { projects }
+            // aside { class: "fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block",
+            //     "TEST TEST"
+            // }
+        }  
     }
 }
 

@@ -2,7 +2,8 @@
 use dioxus::prelude::*;
 use icons::{cog_icon, projects_icon, nesting_icon, parts_icon, sheets_icon};
 
-use crate::{components::navbar::NavbarRow, Route};
+use crate::{components::navbar::NavbarRow, engine::count_projects, views::CURRENT_PROJECT, Route};
+
 
 #[derive(PartialEq, Props, Clone)]
 pub(crate) struct NavbarProps {
@@ -17,37 +18,50 @@ pub(crate) struct NavbarProps {
 #[component]
 pub fn Navbar() -> Element {
     let mut current = use_signal(|| 0);
+    let mut p_count = use_resource(move || crate::engine::count_projects());
+    let mut s_count = use_resource(move || crate::engine::count_sheets(*CURRENT_PROJECT.read()));
     
     rsx! {
         nav {
-            class: "flex flex-1 flex-col",
+            class: "flex flex-1 flex-col bg-zinc-50",
+            onmouseenter: move |_| {
+                p_count.restart();
+                s_count.restart();
+            },
             ul { class: "flex flex-1 flex-col gap-y-7", role: "list",
                 li {
                     ul { class: "-mx-2 space-y-1", role: "list",
                         onclick: move |_| current.set(0),
-                        NavbarRow {name: "Projects", active: is_active(0, current()), route: Route::Projects {}, icon: projects_icon(is_active(0, current())), count: Some("3".to_string())}
+                        NavbarRow {name: "Projects", active: is_active(0, current()), route: Route::Projects {  }, icon: projects_icon(is_active(0, current())), 
+                        count: Some(p_count.suspend()?.cloned().unwrap_or(0).to_string())}
                     }
-                    ul { class: "-mx-2 space-y-1", role: "list",
-                        onclick: move |_| current.set(1),
-                        NavbarRow {name: "Sheets", active: is_active(1, current()), route: Route::Sheets {}, icon: sheets_icon(is_active(1, current())), count: Some("15".to_string())}
-                    }
-                    ul { class: "-mx-2 space-y-1", role: "list",
-                        onclick: move |_| current.set(2),
-                        NavbarRow {name: "Parts", active: is_active(2, current()), route: Route::Parts {}, icon: parts_icon(is_active(2, current())), count: Some("223".to_string())}
-                    }
-                    ul { class: "-mx-2 space-y-1", role: "list",
-                        onclick: move |_| current.set(3),
-                        NavbarRow {name: "Nesting", active: is_active(3, current()), route: Route::Nesting {}, icon: nesting_icon(is_active(3, current())), count: Some("75%".to_string())}
+                    if *CURRENT_PROJECT.read() != std::usize::MAX {
+                        ul { class: "-mx-2 space-y-1", role: "list",
+                            onclick: move |_| current.set(1),
+                            NavbarRow {name: "Sheets", active: is_active(1, current()), route: Route::Sheets {}, icon: sheets_icon(is_active(1, current())), 
+                            count: Some(s_count.suspend()?.cloned().unwrap_or(0).to_string())}
+                        }
+                        ul { class: "-mx-2 space-y-1", role: "list",
+                            onclick: move |_| current.set(2),
+                            NavbarRow {name: "Parts", active: is_active(2, current()), route: Route::Parts {}, icon: parts_icon(is_active(2, current())), 
+                            count: Some("2".to_string())}
+                        }
+                        ul { class: "-mx-2 space-y-1", role: "list",
+                            onclick: move |_| current.set(3),
+                            NavbarRow {name: "Nesting", active: is_active(3, current()), route: Route::Nesting {}, icon: nesting_icon(is_active(3, current())), 
+                            count: Some("75%".to_string())}
+                        }
                     }
                     ul { class: "-mx-2 space-y-1", role: "list",
                         onclick: move |_| current.set(4),
-                        NavbarRow {name: "Config", active: is_active(4, current()), route: Route::Config {}, icon: cog_icon(is_active(4, current()))}
+                        NavbarRow {name: "Config", active: is_active(4, current()), route: Route::Configuration {}, icon: cog_icon(is_active(4, current()))}
                     }
                 }
             }
         }
     }
 }
+
 
 pub(crate) fn is_active(position: i64, current: i64) -> bool {
     position == current

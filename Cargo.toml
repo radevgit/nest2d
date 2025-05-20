@@ -6,7 +6,8 @@ edition = "2021"
 
 
 [dependencies]
-dioxus = { version = "0.6.1", features = ["router", "fullstack"] }
+dioxus = { version = "0.6.3", features = ["router", "fullstack"] }
+rfd = "0.15.3"
 rusqlite = { version = "0.35", features = ["bundled"], optional = true }
 
 [features]

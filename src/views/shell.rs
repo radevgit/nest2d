@@ -1,16 +1,19 @@
 use dioxus::prelude::*;
 use icons::nest2d_icon;
 
-use crate::{components::Navbar, Route};
+use crate::{components::{Navbar}, engine::count_projects, Route};
 
+pub static CURRENT_PROJECT: GlobalSignal<usize> = Signal::global(|| std::usize::MAX);
 
 /// The Shell component that will be rendered on all pages of our app since every page is under the layout.
 #[component]
 pub fn Shell() -> Element {
+    
+
     rsx! {    
         div {
-            div { class: "md:fixed md:inset-y-0 md:z-50 md:flex md:w-64 md:flex-col bg-white",
-                div { class: "flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6",
+            div { class: "md:fixed md:inset-y-0 md:z-50 md:flex md:w-64 md:flex-col bg-zinc-50",
+                div { class: "flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-zinc-50 px-6",
                     div { class: "flex h-16 shrink-0 items-center",
                         Link {
                             class: "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-indigo-600",
@@ -19,15 +22,35 @@ pub fn Shell() -> Element {
                             "Nest2D",
                         }
                     }
-                    Navbar {  }
+                    
+                    Navbar { }
                 }
             }
-            main { class: "py-10 md:pl-72",
-                div { class: "px-4 sm:px-6 md:px-8",
-                    background_color: "white",
+
+            // main { class: "lg:pl-72",
+            //     div { class: "xl:pr-96",
+            //         background_color: "white",
+            //         Outlet::<Route> {}
+            //     }
+            // }
+            // aside { class: "fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block",
+            //     div { 
+            //         "TEST"
+            //     }
+            // }
+
+
+            main { class: "py-10 md:pl-64 bg-zinc-50",
+                div { class: "px-4 sm:px-6 md:px-8 bg-zinc-50",
+                    //background_color: "white",
                     Outlet::<Route> {}
                 }
             }
+            // aside { class: "fixed inset-y-0 left-120 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block",
+            //     div { 
+            //         "TEST"
+            //     }
+            // }
         }
     }
 }

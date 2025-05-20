@@ -11,6 +11,7 @@
 
 mod shell;
 pub use shell::Shell;
+pub use shell::CURRENT_PROJECT;
 
 mod projects;
 pub use projects::Projects;
@@ -25,5 +26,5 @@ mod nesting;
 pub use nesting::Nesting;
 
 mod config;
-pub use config::Config;
+pub use config::Configuration;
 

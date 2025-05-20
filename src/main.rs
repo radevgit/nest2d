@@ -1,7 +1,7 @@
-
 use dioxus::prelude::*;
-use views::{Config, Nesting, Parts, Projects, Sheets, Shell};
 
+use views::{Configuration, Nesting, Parts, Projects, Sheets, Shell};
+use dioxus::logger::tracing::{Level, info};
 
 
 /// Define a components module that contains all shared components for our app.
@@ -37,7 +37,7 @@ enum Route {
         Nesting {},
 
         #[route("/config")]
-        Config {},
+        Configuration {},
 
 
         // // The route attribute can include dynamic parameters that implement [`std::str::FromStr`] and [`std::fmt::Display`] with the `:` syntax.
@@ -56,8 +56,8 @@ enum Route {
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
 fn main() {
-    // The `launch` function is the main entry point for a dioxus app. It takes a component and renders it with the platform feature
-    // you have enabled
+    dioxus::logger::init(Level::INFO).expect("logger failed to init");
+    
     dioxus::launch(App);
     // let window = WindowBuilder::new()
     //     .with_title("Nest2D")

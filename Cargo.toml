@@ -1,30 +1,16 @@
-[package]
-name = "Nest2D"
-version = "0.1.0"
-authors = ["radevgit"]
-edition = "2021"
+[workspace]
+resolver = "2"
+members = [
+    "ui",
+    "web",
+    "desktop",
+    "mobile",
+    "api",
+]
 
+[workspace.dependencies]
+dioxus = { version = "0.7.0-alpha.0" }
 
-[dependencies]
-dioxus = { version = "0.6.3", features = ["router", "fullstack"] }
-rfd = "0.15.3"
-rusqlite = { version = "0.35", features = ["bundled"], optional = true }
-
-[features]
-default = ["desktop", "server"]
-web = ["dioxus/web"]
-desktop = ["dioxus/desktop"]
-mobile = ["dioxus/mobile"]
-server = ["dioxus/server", "dep:rusqlite"]
-
-[profile]
-
-[profile.wasm-dev]
-inherits = "dev"
-opt-level = 1
-
-[profile.server-dev]
-inherits = "dev"
-
-[profile.android-dev]
-inherits = "dev"
+# workspace
+ui = { path = "ui" }
+api = { path = "api" }

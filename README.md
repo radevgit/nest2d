@@ -7,3 +7,7 @@
 ## Status
 
 This is a work in progress.
+
+## Related Projects
+
+Nest2D UI is part of the open-sourced [Nest2D](https://nest2d.com) projects collection.
